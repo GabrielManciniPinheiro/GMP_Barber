@@ -1,7 +1,7 @@
 - [x]Setup do banco
 - [x]Seeding do banco (colocar dados)
-- [] Introdução ao Next.JS
-- [] Tailwind e Shadcn
+- [x] Introdução ao Next.JS
+- [x] Tailwind e Shadcn
 - [] Git Hooks
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
