@@ -86,6 +86,7 @@ const Home = async () => {
           ))}
         </div>
       </div>
+
       {/* RODAPÉ */}
       <footer>
         <Card>
