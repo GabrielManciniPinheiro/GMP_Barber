@@ -17,7 +17,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
             src={service.imageURL!}
             alt={service.name}
             fill
-            className="h-16 w-16 rounded-lg object-cover"
+            className="rounded-lg object-cover"
           />
         </div>
         {/* Direita */}
