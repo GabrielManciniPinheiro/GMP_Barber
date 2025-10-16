@@ -1,16 +1,14 @@
 //"use client"
 //import { useState } from "react"
-import { SearchIcon } from "lucide-react"
 import Header from "./_components/header"
 import { Button } from "./_components/ui/button"
-import { Input } from "./_components/ui/input"
 import Image from "next/image"
 // eslint-disable-next-line no-unused-vars
-import { Card, CardContent } from "./_components/ui/card"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./_components/booking-item"
+import Search from "./_components/search"
 
 const Home = async () => {
   //const [] = useState()
@@ -32,11 +30,8 @@ const Home = async () => {
         <p>Quinta-Feira, 11 de Setembro.</p>
 
         {/* INPUT DE BUSCA */}
-        <div className="mt-6 flex items-center gap-2">
-          <Input placeholder="Faça sua busca..." />
-          <Button className="bg-primary text-primary-foreground transition-transform hover:scale-95 hover:bg-blue-600">
-            <SearchIcon />
-          </Button>
+        <div className="mt-6">
+          <Search />
         </div>
 
         {/* Busca rápida*/}
