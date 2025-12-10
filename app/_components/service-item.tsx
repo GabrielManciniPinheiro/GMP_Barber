@@ -39,7 +39,6 @@ const TIME_LIST = [
   "18:00",
   "18:45",
   "19:30",
-  "20:00",
 ]
 
 const getTimeList = (bookings: Booking[]) => {
