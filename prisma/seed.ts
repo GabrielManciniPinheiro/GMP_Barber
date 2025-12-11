@@ -1,9 +1,18 @@
 import { PrismaClient } from "@prisma/client"
-// filepath: d:\vila_barbearia\prisma\seed.ts
+
 const prisma = new PrismaClient()
 
 async function seedDatabase() {
   try {
+    console.log("🔄 Iniciando o seed...")
+
+    // 1. Limpar dados antigos para evitar duplicidade ou conflitos
+    await prisma.booking.deleteMany()
+    await prisma.barbershopService.deleteMany()
+    await prisma.barbershop.deleteMany()
+
+    console.log("🧹 Banco de dados limpo com sucesso!")
+
     const images = [
       "https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png",
       "https://utfs.io/f/45331760-899c-4b4b-910e-e00babb6ed81-16q.png",
@@ -27,10 +36,9 @@ async function seedDatabase() {
       "https://utfs.io/f/07842cfb-7b30-4fdc-accc-719618dfa1f2-17s.png",
       "https://utfs.io/f/0522fdaf-0357-4213-8f52-1d83c3dcb6cd-18e.png",
     ]
-    // Nomes dos profissionais
+
     const creativeNames = ["Cosme", "Léo", "Alan"]
 
-    // Endereços  barbearias
     const addresses = [
       "Rua Dona Matilde, 714",
       "Rua Dona Matilde, 714",
@@ -71,7 +79,7 @@ async function seedDatabase() {
         description: "Expressão acentuada com modelagem precisa.",
         price: 15.0,
         imageUrl:
-          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUnsmcqIKnyaWBuX2cL7R15ESOVqgrdzZUfhiw",
+          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUnsmcqIKnyaWBuX2cL7R15ESOVqgrdzZUfhiw", // URL Nova
       },
       {
         name: "Relaxamento",
@@ -92,32 +100,26 @@ async function seedDatabase() {
         description: "Descoloração para um visual ousado.",
         price: 85.0,
         imageUrl:
-          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUJQ98lVvEGHSUvQi4wDAWF2roh7aRMxncNdJX",
+          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUJQ98lVvEGHSUvQi4wDAWF2roh7aRMxncNdJX", // URL Nova
       },
       {
         name: "Luzes",
         description: "Luzes que iluminam seu visual.",
         price: 65.0,
         imageUrl:
-          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUx3LiVAetQEHAMkovIOcDZfzP0WiwsdXqr59U",
+          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUx3LiVAetQEHAMkovIOcDZfzP0WiwsdXqr59U", // URL Nova
       },
     ]
 
-    // Criar ou atualizar 10 barbearias com nomes e endereços fictícios (troquei create )
-    // eslint-disable-next-line no-unused-vars
-    const barbershops = []
+    // Loop para criar as 3 barbearias
     for (let i = 0; i < 3; i++) {
       const name = creativeNames[i]
       const address = addresses[i]
       const imageUrl = images[i]
 
-      const barbershop = await prisma.barbershop.upsert({
-        where: { name }, // identifica a barbearia pelo nome
-        update: {
-          address,
-          imageURL: imageUrl,
-        },
-        create: {
+      // Criar barbearia
+      const barbershop = await prisma.barbershop.create({
+        data: {
           name,
           address,
           imageURL: imageUrl,
@@ -127,37 +129,32 @@ async function seedDatabase() {
         },
       })
 
-      // Garantir que cada barbearia tenha os serviços
+      // Criar todos os serviços para esta barbearia
       for (const service of services) {
-        await prisma.barbershopService.upsert({
-          where: {
-            // combinação única: nome + barbershopId
-            name_barbershopId: {
-              name: service.name,
-              barbershopId: barbershop.id,
-            },
-          },
-          update: {
-            description: service.description,
-            price: service.price,
-            imageURL: service.imageUrl,
-          },
-          create: {
+        await prisma.barbershopService.create({
+          data: {
             name: service.name,
             description: service.description,
             price: service.price,
             barbershop: {
-              connect: { id: barbershop.id },
+              connect: {
+                id: barbershop.id,
+              },
             },
             imageURL: service.imageUrl,
           },
         })
       }
+
+      console.log(`✅ Barbearia ${name} criada com sucesso!`)
     }
 
+    console.log("🏁 Seed finalizado com sucesso!")
     await prisma.$disconnect()
   } catch (error) {
-    console.error("Erro ao criar/atualizar as barbearias:", error)
+    console.error("❌ Erro ao criar as barbearias:", error)
+    await prisma.$disconnect()
+    process.exit(1)
   }
 }
 
