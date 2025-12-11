@@ -1,13 +1,36 @@
+"use client"
+
 import { Prisma } from "@prisma/client"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import { Badge } from "./ui/badge"
 import { Card, CardContent } from "./ui/card"
 import { format, isFuture } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "./ui/sheet"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet"
 import { SheetHeader } from "./ui/sheet"
 import Image from "next/image"
 import PhoneItem from "./phone-item"
+import { SheetFooter } from "./ui/sheet"
+import { Button } from "./ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog"
+import { toast } from "sonner"
+import { deleteBooking } from "../_actions/delete-booking"
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -27,6 +50,14 @@ const BookingItem = ({ booking }: BookingItemProps) => {
     barbershopService: { barbershop },
   } = booking
   const isConfirmed = isFuture(booking.date)
+  const handleCancelBooking = async () => {
+    try {
+      await deleteBooking(booking.id)
+      toast.success("Reserva cancelada com sucesso!")
+    } catch (error) {
+      console.log("Erro ao cancelar sua reserva. Tente novamente.")
+    }
+  }
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -136,18 +167,56 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               </div>
 
               <div className="flex items-center justify-between">
-                <h2 className="text-sm text-gray-400">Barbearia</h2>
+                <h2 className="text-sm text-gray-400">Barbeiro</h2>
                 <p className="text-sm">{barbershop.name}</p>
               </div>
             </CardContent>
           </Card>
 
           <div className="space-y-3">
-            {barbershop.phones.map((phone) => (
-              <PhoneItem key={phone} phone={phone} />
+            {barbershop.phones.map((phone, index) => (
+              <PhoneItem key={index} phone={phone} />
             ))}
           </div>
         </div>
+        <SheetFooter className="mt-6">
+          <div className="flex items-center gap-3">
+            <SheetClose asChild>
+              <Button variant="outline" className="w-full">
+                Voltar
+              </Button>
+            </SheetClose>
+            {isConfirmed && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" className="w-full">
+                    Cancelar Reserva
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="w-[90%]">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Cancelar Agendamento</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Tem certeza que deseja cancelar a sua reserva? Seu horário
+                      pode não estar mais disponível futuramente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="flex flex-row gap-3">
+                    <AlertDialogCancel className="w-full">
+                      Voltar
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      className="w-full"
+                      onClick={handleCancelBooking}
+                    >
+                      Confirmar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+          </div>
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   )

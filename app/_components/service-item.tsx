@@ -247,7 +247,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                           </div>
 
                           <div className="flex items-center justify-between">
-                            <h2 className="text-sm text-gray-400">Barbearia</h2>
+                            <h2 className="text-sm text-gray-400">Barbeiro</h2>
                             <p className="text-sm">{barbershop.name}</p>
                           </div>
                         </CardContent>
