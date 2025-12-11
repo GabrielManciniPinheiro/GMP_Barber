@@ -71,7 +71,7 @@ async function seedDatabase() {
         description: "Expressão acentuada com modelagem precisa.",
         price: 15.0,
         imageUrl:
-          "https://utfs.io/f/2118f76e-89e4-43e6-87c9-8f157500c333-b0ps0b.png",
+          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUnsmcqIKnyaWBuX2cL7R15ESOVqgrdzZUfhiw",
       },
       {
         name: "Relaxamento",
@@ -92,14 +92,14 @@ async function seedDatabase() {
         description: "Descoloração para um visual ousado.",
         price: 85.0,
         imageUrl:
-          "https://utfs.io/f/c4919193-a675-4c47-9f21-ebd86d1c8e6a-4oen2a.png",
+          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUJQ98lVvEGHSUvQi4wDAWF2roh7aRMxncNdJX",
       },
       {
         name: "Luzes",
         description: "Luzes que iluminam seu visual.",
         price: 65.0,
         imageUrl:
-          "https://utfs.io/f/8a457cda-f768-411d-a737-cdb23ca6b9b5-b3pegf.png",
+          "https://18hxvbc86w.ufs.sh/f/rtJhNAUbn7dUx3LiVAetQEHAMkovIOcDZfzP0WiwsdXqr59U",
       },
     ]
 
