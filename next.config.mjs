@@ -5,6 +5,10 @@ const nextConfig = {
       {
         hostname: "utfs.io",
       },
+      {
+        protocol: "https",
+        hostname: "**.ufs.sh", // <--- ADICIONE ESTA LINHA (O ** aceita qualquer subdomínio)
+      },
     ],
   },
 }
