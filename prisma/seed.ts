@@ -53,30 +53,51 @@ async function seedDatabase() {
           "https://utfs.io/f/e6bdffb6-24a9-455b-aba3-903c2c2b5bde-1jo6tu.png",
       },
       {
+        name: "Corte e Barba",
+        description: "Tratamento completo para renovar seu visual.",
+        price: 75.0,
+        imageUrl:
+          "https://utfs.io/f/e6bdffb6-24a9-455b-aba3-903c2c2b5bde-1jo6tu.png",
+      },
+      {
         name: "Pézinho",
         description: "Acabamento perfeito para um visual renovado.",
-        price: 25.0,
+        price: 15.0,
         imageUrl:
           "https://utfs.io/f/8a457cda-f768-411d-a737-cdb23ca6b9b5-b3pegf.png",
       },
       {
         name: "Sobrancelha",
         description: "Expressão acentuada com modelagem precisa.",
-        price: 20.0,
+        price: 15.0,
         imageUrl:
           "https://utfs.io/f/2118f76e-89e4-43e6-87c9-8f157500c333-b0ps0b.png",
       },
       {
         name: "Relaxamento",
         description: "Relaxamento revigorante.",
-        price: 30.0,
+        price: 55.0,
         imageUrl:
           "https://utfs.io/f/c4919193-a675-4c47-9f21-ebd86d1c8e6a-4oen2a.png",
       },
       {
-        name: "Hidratação",
-        description: "Hidratação profunda para cabelo e barba.",
-        price: 25.0,
+        name: "Progressiva",
+        description: "Cabelos lisos e sedosos por mais tempo.",
+        price: 75.0,
+        imageUrl:
+          "https://utfs.io/f/c4919193-a675-4c47-9f21-ebd86d1c8e6a-4oen2a.png",
+      },
+      {
+        name: "Platinado",
+        description: "Descoloração para um visual ousado.",
+        price: 85.0,
+        imageUrl:
+          "https://utfs.io/f/c4919193-a675-4c47-9f21-ebd86d1c8e6a-4oen2a.png",
+      },
+      {
+        name: "Luzes",
+        description: "Luzes que iluminam seu visual.",
+        price: 65.0,
         imageUrl:
           "https://utfs.io/f/8a457cda-f768-411d-a737-cdb23ca6b9b5-b3pegf.png",
       },
@@ -85,7 +106,7 @@ async function seedDatabase() {
     // Criar ou atualizar 10 barbearias com nomes e endereços fictícios (troquei create )
     // eslint-disable-next-line no-unused-vars
     const barbershops = []
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 3; i++) {
       const name = creativeNames[i]
       const address = addresses[i]
       const imageUrl = images[i]
