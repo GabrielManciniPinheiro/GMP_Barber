@@ -32,7 +32,7 @@ const DashboardTable = ({ bookings }: DashboardTableProps) => {
   const getBarberColor = (name: string) => {
     if (name.includes("Alan")) return "bg-orange-500/20 text-orange-500"
     if (name.includes("Cosme")) return "bg-purple-500/20 text-purple-500"
-    if (name.includes("Léo")) return "bg-green-500/20 text-green-500"
+    if (name.includes("Leo")) return "bg-green-500/20 text-green-500"
     return "bg-gray-500/20 text-gray-500"
   }
 
