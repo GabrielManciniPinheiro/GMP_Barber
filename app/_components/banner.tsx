@@ -26,14 +26,16 @@ const PromoBanner = ({ src, alt }: PromoBannerProps) => {
          - lg:h-[350px]: Altura maior em telas grandes
          Isso impede que o banner fique gigante na vertical.
       */}
-      <div className="relative h-[150px] w-full md:h-[200px] lg:h-[250px]">
+      <div className="relative h-[150px] w-full md:h-[300px] lg:h-[600px]">
         <Image
           src={src}
           alt={alt}
           fill // Ocupa 100% do container pai
-          className="rounded-xl object-cover" // object-cover evita distorção (corta excessos)
+          className="rounded-xl object-cover shadow-lg" // object-cover evita distorção (corta excessos)
           quality={100} // Garante qualidade máxima
         />
+        {/* Efeito de brilho/sombra opcional para dar profundidade */}
+        <div className="absolute inset-0 rounded-xl bg-black/20 transition-all duration-300 hover:bg-transparent" />
       </div>
     </div>
   )
