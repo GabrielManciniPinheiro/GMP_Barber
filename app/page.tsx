@@ -115,7 +115,7 @@ const Home = async () => {
         </div>
 
         {/* LISTA DE POPULARES */}
-        <div className="mb-[4.5rem] mt-6">
+        <div className="mb-1 mt-6">
           <h2 className="mb-3 text-xs font-bold uppercase text-gray-400">
             Populares
           </h2>

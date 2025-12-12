@@ -22,6 +22,7 @@ import { isPast } from "date-fns"
 import { useMemo } from "react"
 import BookingSummary from "./booking-summary"
 import HorizontalScroll from "./ui/horizontal-scroll"
+import { addDays } from "date-fns"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -206,7 +207,10 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       locale={ptBR}
                       selected={selectedDay}
                       onSelect={handleDateSelect}
-                      disabled={{ before: new Date() }}
+                      disabled={{
+                        before: new Date(),
+                        after: addDays(new Date(), 30),
+                      }}
                       styles={{
                         head_cell: {
                           width: "100%",
