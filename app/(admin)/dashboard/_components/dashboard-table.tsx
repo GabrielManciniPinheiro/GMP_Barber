@@ -151,7 +151,7 @@ const DashboardTable = ({ bookings }: DashboardTableProps) => {
       </div>
 
       {/* BOTÃO VOLTAR (Trouxemos pra cá pra ficar junto da tabela) */}
-      <div className="flex w-full justify-start">
+      <div className="flex w-full justify-center">
         <Button variant="secondary" asChild className="gap-2">
           <Link href="/">
             <ChevronLeft size={18} />
