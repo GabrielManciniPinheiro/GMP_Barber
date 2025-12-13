@@ -38,7 +38,7 @@ const Search = () => {
             <FormItem className="w-full">
               <FormControl>
                 <Input
-                  placeholder="Faça sua busca..."
+                  placeholder="Faça a busca do seu barbeiro..."
                   {...field}
                   className="w-full"
                 />
