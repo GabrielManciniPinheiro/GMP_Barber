@@ -20,12 +20,16 @@ const Home = async () => {
   const session = await getServerSession(authOptions)
 
   // Chamar banco de dados
-  const barbershops = await db.barbershop.findMany({})
-  const popularBarbershops = await db.barbershop.findMany({
+  const barbershops = await db.barbershop.findMany({
     orderBy: {
-      name: "desc",
+      name: "asc",
     },
   })
+  // const popularBarbershops = await db.barbershop.findMany({
+  //   orderBy: {
+  //     name: "desc",
+  //   },
+  // })
 
   const confirmedBookings = await getConfirmedBookings()
 
@@ -114,7 +118,7 @@ const Home = async () => {
           </HorizontalScroll>
         </div>
 
-        {/* LISTA DE POPULARES */}
+        {/* LISTA DE POPULARES
         <div className="mb-1 mt-6">
           <h2 className="mb-3 text-xs font-bold uppercase text-gray-400">
             Populares
@@ -126,7 +130,7 @@ const Home = async () => {
               </div>
             ))}
           </HorizontalScroll>
-        </div>
+        </div> */}
       </div>
     </div>
   )

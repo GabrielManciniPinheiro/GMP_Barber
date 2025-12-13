@@ -1,12 +1,19 @@
-import { getDashboardBookings } from "@/app/_actions/get-all-bookings"
-import { Button } from "@/app/_components/ui/button"
+import { getDashboardBookings } from "@/app/_actions/get-all-bookings" // Importe do SEU arquivo
+import { db } from "@/app/_lib/prisma"
 import { LayoutDashboard } from "lucide-react"
-import Link from "next/link"
-import DashboardTable from "./_components/dashboard-table" // <--- Importamos o componente novo
+import DashboardTable from "./_components/dashboard-table"
+import BlockDayDialog from "./_components/block-day-dialog"
 
 export default async function DashboardPage() {
-  // Busca os dados no servidor (Server Side)
+  // 1. Busca os agendamentos (Agora vem ordenado por data ASC)
   const bookings = await getDashboardBookings()
+
+  // 2. Busca as barbearias (Para preencher o botão de bloquear)
+  const barbershops = await db.barbershop.findMany({
+    include: {
+      services: true,
+    },
+  })
 
   return (
     <div className="space-y-6 p-5 pb-20 md:p-10">
@@ -21,12 +28,11 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <Button asChild className="w-full md:w-auto">
-          <Link href="/">Bloquear Horário (Novo Agendamento)</Link>
-        </Button>
+        {/* BOTÃO DE BLOQUEIO DE DIA */}
+        <BlockDayDialog barbershops={barbershops} />
       </div>
 
-      {/* AQUI ENTRA A TABELA INTERATIVA COM OS DADOS */}
+      {/* TABELA DE DADOS */}
       <DashboardTable bookings={bookings} />
     </div>
   )
