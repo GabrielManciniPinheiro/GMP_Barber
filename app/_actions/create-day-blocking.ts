@@ -4,9 +4,9 @@ import { db } from "@/app/_lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/_lib/auth"
 import { revalidatePath } from "next/cache"
-import { set } from "date-fns"
+import { set, addHours } from "date-fns" // <--- IMPORTANTE: addHours
 
-// Horários para preencher a agenda
+// Lista de horários da barbearia
 const TIME_LIST = [
   "09:00",
   "09:45",
@@ -44,54 +44,63 @@ export const createDayBlocking = async ({
 
   const adminUserId = (session?.user as any).id
 
-  // 1. Gera os horários
+  // 1. Gera os horários com CORREÇÃO DE FUSO
   const bookingsToCreate = TIME_LIST.map((time) => {
     const [hour, minute] = time.split(":").map(Number)
 
-    // Ajusta a data para o horário específico
-    const bookingDate = set(date, {
+    // Cria a data base com o horário da lista
+    let bookingDate = set(date, {
       hours: hour,
       minutes: minute,
       seconds: 0,
       milliseconds: 0,
     })
 
+    // --- A MÁGICA DO FUSO HORÁRIO ---
+    // O servidor da Vercel roda em UTC (offset 0). O Brasil é -3 (offset 180).
+    // Se o offset for 0, somamos 3 horas.
+    // Resultado: Salvamos 12:00 UTC -> No Brasil aparece 09:00.
+    const serverOffset = new Date().getTimezoneOffset()
+    if (serverOffset === 0) {
+      bookingDate = addHours(bookingDate, 3)
+    }
+    // --------------------------------
+
     return {
       date: bookingDate,
-      barbershopServiceId: serviceId, // Obrigatório
-      userId: adminUserId, // Obrigatório
-      // REMOVI O 'barbershopId' DAQUI POIS PROVAVELMENTE NÃO EXISTE NA TABELA BOOKING
+      barbershopServiceId: serviceId,
+      userId: adminUserId,
     }
   })
 
-  // 2. Verifica conflitos (opcional, mas bom pra evitar erro de chave duplicada se houver)
-  // Vamos simplificar: Tenta buscar o que já existe nesse dia/barbearia
+  // 2. Verifica conflitos (opcional, mas seguro)
   const existingBookings = await db.booking.findMany({
     where: {
       date: {
         gte: set(date, { hours: 0, minutes: 0 }),
         lte: set(date, { hours: 23, minutes: 59 }),
       },
-      // Filtra bookings desta barbearia através do serviço
       barbershopService: {
         barbershopId: barbershopId,
       },
     },
   })
 
-  // 3. Filtra: Só cria o que estiver livre
+  // 3. Filtra apenas os livres
   const finalBookings = bookingsToCreate.filter((newBooking) => {
+    // Compara ignorando milissegundos
     return !existingBookings.some(
-      (existing) => existing.date.getTime() === newBooking.date.getTime(),
+      (existing) =>
+        Math.abs(existing.date.getTime() - newBooking.date.getTime()) <
+        5 * 60 * 1000,
     )
   })
 
   if (finalBookings.length === 0) {
-    // Se não tem nada pra criar (dia cheio), retorna sucesso falso mas sem quebrar
     return { success: false }
   }
 
-  // 4. Cria tudo de uma vez
+  // 4. Salva no banco
   await db.booking.createMany({
     data: finalBookings,
   })
