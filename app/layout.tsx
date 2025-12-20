@@ -17,7 +17,7 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "GMPTechnology - GMP Barber",
+  title: "GMP Barber",
   description:
     "GMP Barber is a cutting-edge web application designed to streamline the management of barber shops. With features like appointment scheduling, customer management, and inventory tracking, GMP Barber empowers barbershop owners to enhance their business operations and provide exceptional service to their clients.",
 }
