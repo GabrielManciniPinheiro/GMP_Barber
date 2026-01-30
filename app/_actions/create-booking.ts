@@ -5,6 +5,8 @@ import { db } from "../_lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../_lib/auth"
 import { set } from "date-fns"
+// 1. Importação da função de email (Resend)
+import { sendBookingConfirmation } from "../_lib/resend"
 
 interface CreateBookingParams {
   serviceId: string
@@ -21,15 +23,18 @@ export const createBooking = async ({
     throw new Error("Usuário não autenticado")
   }
 
-  // 1. Limpa a data (segundos/ms)
+  // Limpa a data (segundos/ms)
   const dateWithTime = set(date, {
     seconds: 0,
     milliseconds: 0,
   })
 
-  // 2. Descobre quem é o barbeiro desse serviço
+  // 2. Busca o serviço E a barbearia (Necessário para o email)
   const service = await db.barbershopService.findUnique({
     where: { id: serviceId },
+    include: {
+      barbershop: true, // <--- Adicionado para pegar o nome da barbearia
+    },
   })
 
   if (!service) {
@@ -37,12 +42,11 @@ export const createBooking = async ({
   }
 
   // 3. TRAVA GLOBAL DO BARBEIRO 🛡️
-  // Verifica se esse BARBEIRO já tem agendamento neste horário (em qualquer serviço)
   const conflict = await db.booking.findFirst({
     where: {
       date: dateWithTime,
       barbershopService: {
-        barbershopId: service.barbershopId, // Verifica a agenda do PROFISSIONAL
+        barbershopId: service.barbershopId,
       },
     },
   })
@@ -51,7 +55,7 @@ export const createBooking = async ({
     throw new Error("Horário indisponível para este barbeiro.")
   }
 
-  // 4. Salva
+  // 4. Salva o agendamento
   await db.booking.create({
     data: {
       date: dateWithTime,
@@ -59,6 +63,23 @@ export const createBooking = async ({
       userId: (session.user as any).id,
     },
   })
+
+  // 5. ENVIA O EMAIL DE CONFIRMAÇÃO 📧
+  // Verifica se o usuário tem email cadastrado antes de enviar
+  if (session.user.email && session.user.name) {
+    try {
+      await sendBookingConfirmation({
+        userEmail: session.user.email,
+        userName: session.user.name,
+        serviceName: service.name,
+        barbershopName: service.barbershop.name,
+        date: dateWithTime,
+      })
+    } catch (error) {
+      // Apenas loga o erro, mas não trava o agendamento se o email falhar
+      console.error("Erro ao enviar email:", error)
+    }
+  }
 
   revalidatePath("/bookings")
   revalidatePath("/")
