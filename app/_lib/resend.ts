@@ -35,7 +35,7 @@ export async function sendBookingConfirmation({
           <p>Seu horário está garantido. Veja os detalhes abaixo:</p>
           
           <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p style="margin: 5px 0;"><strong>🏢 Barbearia:</strong> ${barbershopName}</p>
+            <p style="margin: 5px 0;"><strong>🏢 Barbeiro:</strong> ${barbershopName}</p>
             <p style="margin: 5px 0;"><strong>✂️ Serviço:</strong> ${serviceName}</p>
             <p style="margin: 5px 0;"><strong>📅 Data:</strong> ${formattedDate}</p>
           </div>
