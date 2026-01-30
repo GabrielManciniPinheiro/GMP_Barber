@@ -27,7 +27,7 @@ export async function sendBookingConfirmation({
     await resend.emails.send({
       from: "Agendamento <nao-responda@gmpsaas.com>", // Use um email do seu domínio
       to: userEmail,
-      subject: `Confirmado: ${serviceName} na ${barbershopName}`,
+      subject: `Confirmado: ${serviceName} na Vila Barbearia com ${barbershopName}`,
       html: `
         <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto;">
           <h1 style="color: #4F46E5;">Agendamento Confirmado! ✅</h1>
