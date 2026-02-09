@@ -18,6 +18,7 @@ export async function sendBookingConfirmation({
   try {
     // Formata a data (ex: 25 de Fevereiro às 14:00)
     const formattedDate = date.toLocaleDateString("pt-BR", {
+      timeZone: "America/Sao_Paulo",
       day: "numeric",
       month: "long",
       hour: "2-digit",
